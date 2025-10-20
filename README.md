@@ -1,0 +1,2 @@
+# wotaku
+anime-streaming website
