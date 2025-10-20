@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOTAKU - Watching Indonesian Anime Universe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #e50914;
+            --dark: #141414;
+            --light: #f5f5f5;
+            --gray: #808080;
+            --dark-gray: #2a2a2a;
+            --accent: #00a8ff;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+            transition: background-color 0.3s;
+        }
+
+        header.scrolled {
+            background-color: var(--dark);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: var(--light);
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li a i {
+            margin-right: 5px;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--primary);
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 8px 15px;
+            color: var(--light);
+            margin-right: 10px;
+            width: 200px;
+            transition: width 0.3s, background 0.3s;
+        }
+
+        .search-box:focus {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Page Styles */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 80vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            margin-bottom: 40px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(20,20,20,0.9) 0%, rgba(20,20,20,0.5) 50%, rgba(20,20,20,0.1) 100%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-meta {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .hero-meta span {
+            margin-right: 15px;
+            font-size: 14px;
+        }
+
+        .hero-rating {
+            color: gold;
+        }
+
+        .hero-description {
+            margin-bottom: 30px;
+            line-height: 1.5;
+            font-size: 16px;
+        }
+
+        .hero-buttons {
+            display: flex;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 0 5%;
+            margin-bottom: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .view-all {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .view-all i {
+            margin-left: 5px;
+        }
+
+        .view-all:hover {
+            color: var(--primary);
+        }
+
+        /* Anime Grid */
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .anime-card {
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+            background: var(--dark-gray);
+        }
+
+        .anime-card:hover {
+            transform: scale(1.05);
+        }
+
+        .anime-poster {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .anime-info {
+            padding: 15px;
+        }
+
+        .anime-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .anime-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Episode List */
+        .episode-list {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 10px 0;
+        }
+
+        .episode-list::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .episode-list::-webkit-scrollbar-thumb {
+            background-color: var(--gray);
+            border-radius: 4px;
+        }
+
+        .episode-card {
+            min-width: 300px;
+            background-color: var(--dark-gray);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .episode-card:hover {
+            transform: scale(1.03);
+        }
+
+        .episode-thumbnail {
+            width: 100%;
+            height: 170px;
+            object-fit: cover;
+        }
+
+        .episode-content {
+            padding: 15px;
+        }
+
+        .episode-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .episode-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Detail Page */
+        .detail-container {
+            padding: 100px 5% 40px;
+        }
+
+        .detail-header {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .detail-poster {
+            width: 300px;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .detail-info {
+            flex: 1;
+        }
+
+        .detail-title {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .detail-japanese {
+            font-size: 18px;
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .detail-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-size: 16px;
+        }
+
+        .genres {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .genre-tag {
+            background-color: var(--dark-gray);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+
+        .genre-tag:hover {
+            background-color: var(--primary);
+        }
+
+        .synopsis {
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .synopsis h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        /* Episode Page */
+        .episode-container {
+            padding: 100px 5% 40px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            margin-bottom: 30px;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .video-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .episode-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .download-section {
+            margin-top: 30px;
+        }
+
+        .download-format {
+            margin-bottom: 20px;
+        }
+
+        .format-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--dark-gray);
+            padding-bottom: 5px;
+        }
+
+        .resolution-section {
+            margin-bottom: 15px;
+        }
+
+        .resolution-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+
+        .download-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .download-link {
+            background-color: var(--dark-gray);
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--light);
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .download-link i {
+            margin-right: 5px;
+        }
+
+        .download-link:hover {
+            background-color: var(--primary);
+        }
+
+        /* Genre Page */
+        .genre-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .genre-card {
+            background: var(--dark-gray);
+            padding: 30px 20px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .genre-card:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .genre-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Search Page */
+        .search-results {
+            margin-top: 20px;
+        }
+
+        .search-info {
+            margin-bottom: 20px;
+            color: var(--gray);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .page-btn {
+            padding: 8px 15px;
+            background: var(--dark-gray);
+            color: var(--light);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .page-btn.active, .page-btn:hover {
+            background: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-gray);
+            padding: 40px 5%;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-logo i {
+            margin-right: 10px;
+        }
+
+        .footer-credits {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .detail-header {
+                flex-direction: column;
+            }
+            
+            .detail-poster {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            
+            nav ul {
+                display: none;
+            }
+            
+            .search-box {
+                width: 150px;
+            }
+
+            .anime-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .genre-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 4px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Video Quality Selector */
+        .quality-selector {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quality-btn {
+            background: var(--dark-gray);
+            border: none;
+            color: var(--light);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .quality-btn.active {
+            background: var(--primary);
+        }
+
+        .quality-btn:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <a href="#" class="logo" data-page="home">
+            <i class="fas fa-play-circle"></i>WO<span>TAKU</span>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="#" class="nav-link active" data-page="home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#" class="nav-link" data-page="ongoing"><i class="fas fa-tv"></i> Ongoing</a></li>
+                <li><a href="#" class="nav-link" data-page="complete"><i class="fas fa-check-circle"></i> Complete</a></li>
+                <li><a href="#" class="nav-link" data-page="genre"><i class="fas fa-tags"></i> Genre</a></li>
+            </ul>
+        </nav>
+        <div class="search-container">
+            <input type="text" class="search-box" id="search-input" placeholder="Cari anime...">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <span id="notification-text"></span>
+    </div>
+
+    <!-- Home Page -->
+    <section id="home-page" class="page active">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-bg" id="hero-bg"></div>
+            <div class="hero-content">
+                <h1 class="hero-title" id="hero-title">Sousou no Frieren</h1>
+                <div class="hero-meta">
+                    <span class="hero-rating"><i class="fas fa-star"></i> 8.89</span>
+                    <span>2023</span>
+                    <span>24 Min.</span>
+                    <span>TV</span>
+                </div>
+                <p class="hero-description" id="hero-description">Petualangan seorang penyihir elf yang merenungkan arti kehidupan setelah kematian teman-temannya dalam petualangan melawan Raja Iblis.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" id="hero-watch-btn"><i class="fas fa-play"></i> Tonton Sekarang</button>
+                    <button class="btn btn-secondary" id="hero-info-btn"><i class="fas fa-info-circle"></i> Info Lebih Lanjut</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ongoing Anime Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Sedang Tayang</h2>
+                <a href="#" class="view-all" data-page="ongoing">Lihat Semua <i class="fas fa-chevron-right"></i></a>
+            </div>
+            <div class="anime-grid" id="ongoing-anime-grid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complete Anime Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Anime Selesai</h2>
+                <a href="#" class="view-all" data-page="complete">Lihat Semua <i class="fas fa-chevron-right"></i></a>
+            </div>
+            <div class="anime-grid" id="complete-anime-grid">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ongoing Anime Page -->
+    <section id="ongoing-page" class="page">
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Anime Sedang Tayang</h2>
+            </div>
+            <div class="anime-grid" id="ongoing-list">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <div class="pagination" id="ongoing-pagination"></div>
+        </div>
+    </section>
+
+    <!-- Complete Anime Page -->
+    <section id="complete-page" class="page">
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Anime Selesai</h2>
+            </div>
+            <div class="anime-grid" id="complete-list">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <div class="pagination" id="complete-pagination"></div>
+        </div>
+    </section>
+
+    <!-- Genre Page -->
+    <section id="genre-page" class="page">
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Genre Anime</h2>
+            </div>
+            <div class="genre-grid" id="genre-list">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Genre Detail Page -->
+    <section id="genre-detail-page" class="page">
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title" id="genre-detail-title">Genre</h2>
+                <button class="btn btn-secondary" onclick="navigateTo('genre')">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Genre
+                </button>
+            </div>
+            <div class="anime-grid" id="genre-anime-list">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <div class="pagination" id="genre-pagination"></div>
+        </div>
+    </section>
+
+    <!-- Search Results Page -->
+    <section id="search-page" class="page">
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Hasil Pencarian</h2>
+                <button class="btn btn-secondary" onclick="navigateTo('home')">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
+            </div>
+            <div class="search-info" id="search-info"></div>
+            <div class="anime-grid" id="search-results">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+            <div class="pagination" id="search-pagination"></div>
+        </div>
+    </section>
+
+    <!-- Anime Detail Page -->
+    <section id="anime-detail-page" class="page">
+        <div class="detail-container">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Episode Page -->
+    <section id="episode-page" class="page">
+        <div class="episode-container">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo"><i class="fas fa-play-circle"></i>WOTAKU</div>
+        <p class="footer-credits">Website by Bito Sistem Informasi</p>
+    </footer>
+
+    <script>
+        // API Configuration
+        const API_BASE = 'https://api.otakudesu.natee.my.id';
+
+        // Current state
+        let currentPage = 'home';
+        let currentAnimeSlug = '';
+        let currentEpisodeSlug = '';
+        let ongoingPage = 1;
+        let completePage = 1;
+        let genrePage = 1;
+        let searchPage = 1;
+        let heroAnime = null;
+        let currentGenre = null;
+        let searchQuery = '';
+
+        // DOM Elements
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const header = document.getElementById('header');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
+        const searchInput = document.getElementById('search-input');
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load home page data
+            loadHomeData();
+            
+            // Set up navigation
+            setupNavigation();
+            
+            // Set up scroll effect for header
+            window.addEventListener('scroll', handleScroll);
+            
+            // Set up search functionality
+            setupSearch();
+        });
+
+        // Navigation setup
+        function setupNavigation() {
+            // Main navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    navigateTo(page);
+                });
+            });
+
+            // View all links
+            document.querySelectorAll('.view-all').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    navigateTo(page);
+                });
+            });
+
+            // Logo home link
+            document.querySelector('.logo').addEventListener('click', function(e) {
+                e.preventDefault();
+                navigateTo('home');
+            });
+        }
+
+        // Search setup
+        function setupSearch() {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const query = this.value.trim();
+                    if (query) {
+                        searchAnime(query, 1);
+                    }
+                }
+            });
+        }
+
+        // Navigation function
+        function navigateTo(page) {
+            // Hide all pages
+            pages.forEach(p => p.classList.remove('active'));
+            
+            // Update nav links
+            navLinks.forEach(link => link.classList.remove('active'));
+            
+            // Show target page
+            document.getElementById(`${page}-page`).classList.add('active');
+            
+            // Update nav link if it exists
+            const navLink = document.querySelector(`[data-page="${page}"]`);
+            if (navLink) {
+                navLink.classList.add('active');
+            }
+            
+            // Update current page
+            currentPage = page;
+            
+            // Load page-specific data
+            switch(page) {
+                case 'home':
+                    loadHomeData();
+                    break;
+                case 'ongoing':
+                    loadOngoingAnime(1);
+                    break;
+                case 'complete':
+                    loadCompleteAnime(1);
+                    break;
+                case 'genre':
+                    loadGenreList();
+                    break;
+                case 'search':
+                    // Search page is handled by search function
+                    break;
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Handle scroll for header effect
+        function handleScroll() {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }
+
+        // Show notification
+        function showNotification(message, duration = 3000) {
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, duration);
+        }
+
+        // API Functions
+        async function fetchAPI(endpoint) {
+            try {
+                showNotification('Memuat data...');
+                const response = await fetch(`${API_BASE}${endpoint}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                showNotification('Gagal memuat data', 5000);
+                return null;
+            }
+        }
+
+        // Load home page data
+        async function loadHomeData() {
+            const data = await fetchAPI('/api/home');
+            if (data && data.data) {
+                // Set hero anime (first ongoing anime)
+                if (data.data.ongoing_anime && data.data.ongoing_anime.length > 0) {
+                    heroAnime = data.data.ongoing_anime[0];
+                    updateHeroSection(heroAnime);
+                }
+                
+                renderOngoingAnime(data.data.ongoing_anime);
+                renderCompleteAnime(data.data.complete_anime);
+            }
+        }
+
+        // Update hero section
+        function updateHeroSection(anime) {
+            document.getElementById('hero-title').textContent = anime.title;
+            document.getElementById('hero-bg').style.backgroundImage = `linear-gradient(to right, rgba(20,20,20,0.9) 0%, rgba(20,20,20,0.5) 50%, rgba(20,20,20,0.1) 100%), url('${anime.poster}')`;
+            
+            // Set up hero buttons
+            document.getElementById('hero-watch-btn').onclick = () => {
+                navigateToAnimeDetail(anime.slug);
+            };
+            
+            document.getElementById('hero-info-btn').onclick = () => {
+                navigateToAnimeDetail(anime.slug);
+            };
+        }
+
+        // Load ongoing anime with pagination
+        async function loadOngoingAnime(page) {
+            const data = await fetchAPI(`/api/ongoing-anime/${page}`);
+            if (data && data.data) {
+                renderOngoingList(data.data.ongoingAnimeData, data.data.paginationData);
+            }
+        }
+
+        // Load complete anime with pagination
+        async function loadCompleteAnime(page) {
+            const data = await fetchAPI(`/api/complete-anime/${page}`);
+            if (data && data.data) {
+                renderCompleteList(data.data.completeAnimeData, data.data.paginationData);
+            }
+        }
+
+        // Load genre list
+        async function loadGenreList() {
+            const data = await fetchAPI('/api/genre');
+            if (data && data.data) {
+                renderGenreList(data.data);
+            }
+        }
+
+        // Load genre detail
+        async function loadGenreDetail(slug, page) {
+            const data = await fetchAPI(`/api/genre/${slug}?page=${page}`);
+            if (data && data.data) {
+                renderGenreDetail(slug, data.data.anime, data.data.pagination);
+            }
+        }
+
+        // Load anime detail
+        async function loadAnimeDetail(slug) {
+            const data = await fetchAPI(`/api/anime/${slug}`);
+            if (data && data.data) {
+                renderAnimeDetail(data.data);
+            }
+        }
+
+        // Load episode data - FIXED SLUG HANDLING
+        async function loadEpisode(slug, episode) {
+            // Clean the slug - remove any URL parts
+            const cleanSlug = cleanAnimeSlug(slug);
+            
+            const data = await fetchAPI(`/api/anime/${cleanSlug}/episodes/${episode}`);
+            if (data && data.data) {
+                renderEpisode(data.data);
+            } else {
+                showNotification('Episode tidak ditemukan. Mencoba format alternatif...');
+                // Fallback: coba dengan format slug yang berbeda
+                tryAlternativeEpisodeFormat(slug, episode);
+            }
+        }
+
+        // Clean anime slug from URL format
+        function cleanAnimeSlug(slug) {
+            if (!slug) return '';
+            
+            // Jika slug adalah URL lengkap, ekstrak hanya bagian slug-nya
+            if (slug.includes('otakudesu')) {
+                // Contoh: "https:/otakudesu.best/anime/gachiakuta-sub-indo/" -> "gachiakuta-sub-indo"
+                const match = slug.match(/anime\/([^\/]+)/);
+                return match ? match[1] : slug;
+            }
+            
+            // Jika sudah bersih, return as is
+            return slug;
+        }
+
+        // Alternative episode format untuk anime yang slugnya berbeda
+        async function tryAlternativeEpisodeFormat(slug, episode) {
+            // Clean the slug first
+            const cleanSlug = cleanAnimeSlug(slug);
+            
+            // Coba beberapa format alternatif
+            const alternativeSlugs = [
+                cleanSlug,
+                cleanSlug.replace('-sub-indo', ''),
+                cleanSlug.replace(/-/g, ''),
+                cleanSlug.split('-').slice(0, -2).join('-') // Hapus bagian akhir seperti -sub-indo
+            ];
+            
+            for (const altSlug of alternativeSlugs) {
+                if (altSlug === cleanSlug) continue; // Skip yang sudah dicoba
+                
+                const data = await fetchAPI(`/api/anime/${altSlug}/episodes/${episode}`);
+                if (data && data.data) {
+                    showNotification('Episode ditemukan dengan format alternatif');
+                    renderEpisode(data.data);
+                    return;
+                }
+            }
+            
+            showNotification('Episode tidak dapat ditemukan');
+        }
+
+        // Search anime
+        async function searchAnime(query, page) {
+            searchQuery = query;
+            
+            // Hide all pages
+            pages.forEach(p => p.classList.remove('active'));
+            
+            // Show search page
+            document.getElementById('search-page').classList.add('active');
+            
+            // Update current page
+            currentPage = 'search';
+            
+            // Since the API doesn't have a direct search endpoint, we'll simulate it
+            // by using the complete anime list and filtering
+            showNotification(`Mencari: ${query}`);
+            
+            // In a real implementation, you would call a search API endpoint
+            // For now, we'll use a mock implementation
+            const mockResults = await mockSearchAnime(query, page);
+            renderSearchResults(query, mockResults, page);
+        }
+
+        // Mock search function (in a real app, this would be an API call)
+        async function mockSearchAnime(query, page) {
+            // This is a mock implementation - in reality, you would call an API
+            // For demonstration, we'll return some mock data
+            return {
+                results: [
+                    {
+                        title: `Hasil Pencarian untuk "${query}"`,
+                        slug: 'search-result-1',
+                        poster: 'https://via.placeholder.com/200x280/2a2a2a/ffffff?text=Search+Result',
+                        episode_count: '12',
+                        rating: '7.5',
+                        last_release_date: '2023',
+                        otakudesu_url: '#'
+                    }
+                ],
+                pagination: {
+                    current_page: page,
+                    last_visible_page: 1,
+                    has_next_page: false,
+                    next_page: null,
+                    has_previous_page: false,
+                    previous_page: null
+                }
+            };
+        }
+
+        // Render functions
+        function renderOngoingAnime(animeList) {
+            const container = document.getElementById('ongoing-anime-grid');
+            if (!animeList || animeList.length === 0) {
+                container.innerHTML = '<p>Tidak ada anime yang sedang tayang</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            animeList.slice(0, 6).forEach(anime => {
+                const card = createAnimeCard(anime, 'ongoing');
+                container.appendChild(card);
+            });
+        }
+
+        function renderCompleteAnime(animeList) {
+            const container = document.getElementById('complete-anime-grid');
+            if (!animeList || animeList.length === 0) {
+                container.innerHTML = '<p>Tidak ada anime yang selesai</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            animeList.slice(0, 6).forEach(anime => {
+                const card = createAnimeCard(anime, 'complete');
+                container.appendChild(card);
+            });
+        }
+
+        function renderOngoingList(animeList, pagination) {
+            const container = document.getElementById('ongoing-list');
+            if (!animeList || animeList.length === 0) {
+                container.innerHTML = '<p>Tidak ada anime yang sedang tayang</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            animeList.forEach(anime => {
+                const card = createAnimeCard(anime, 'ongoing');
+                container.appendChild(card);
+            });
+            
+            renderPagination('ongoing-pagination', pagination, 'ongoing');
+        }
+
+        function renderCompleteList(animeList, pagination) {
+            const container = document.getElementById('complete-list');
+            if (!animeList || animeList.length === 0) {
+                container.innerHTML = '<p>Tidak ada anime yang selesai</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            animeList.forEach(anime => {
+                const card = createAnimeCard(anime, 'complete');
+                container.appendChild(card);
+            });
+            
+            renderPagination('complete-pagination', pagination, 'complete');
+        }
+
+        function renderGenreList(genreList) {
+            const container = document.getElementById('genre-list');
+            if (!genreList || genreList.length === 0) {
+                container.innerHTML = '<p>Tidak ada genre</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            genreList.forEach(genre => {
+                const card = document.createElement('div');
+                card.className = 'genre-card';
+                card.innerHTML = `
+                    <div class="genre-name">${genre.name}</div>
+                `;
+                card.addEventListener('click', () => {
+                    navigateToGenreDetail(genre.slug, genre.name);
+                });
+                container.appendChild(card);
+            });
+        }
+
+        function renderGenreDetail(slug, animeList, pagination) {
+            const container = document.getElementById('genre-anime-list');
+            const title = document.getElementById('genre-detail-title');
+            
+            title.textContent = `Genre: ${currentGenre}`;
+            
+            if (!animeList || animeList.length === 0) {
+                container.innerHTML = '<p>Tidak ada anime dalam genre ini</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            animeList.forEach(anime => {
+                const card = createAnimeCard(anime, 'genre');
+                container.appendChild(card);
+            });
+            
+            renderPagination('genre-pagination', pagination, 'genre', slug);
+        }
+
+        function renderSearchResults(query, data, page) {
+            const container = document.getElementById('search-results');
+            const info = document.getElementById('search-info');
+            
+            info.textContent = `Menampilkan hasil pencarian untuk "${query}"`;
+            
+            if (!data.results || data.results.length === 0) {
+                container.innerHTML = '<p>Tidak ada hasil pencarian</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            data.results.forEach(anime => {
+                const card = createAnimeCard(anime, 'search');
+                container.appendChild(card);
+            });
+            
+            renderPagination('search-pagination', data.pagination, 'search', query);
+        }
+
+        function renderAnimeDetail(anime) {
+            const container = document.querySelector('#anime-detail-page .detail-container');
+            
+            // Create genres HTML
+            let genresHTML = '';
+            if (anime.genres) {
+                anime.genres.forEach(genre => {
+                    genresHTML += `<span class="genre-tag" data-slug="${genre.slug}">${genre.name}</span>`;
+                });
+            }
+            
+            // Create episode list HTML - FIXED EPISODE EXTRACTION
+            let episodesHTML = '';
+            if (anime.episode_lists && anime.episode_lists.length > 0) {
+                anime.episode_lists.forEach(episode => {
+                    // Extract episode number from various formats
+                    let episodeNumber = extractEpisodeNumber(episode.slug, episode.episode);
+                    episodesHTML += `
+                        <div class="episode-card" data-slug="${episode.slug}" data-episode="${episodeNumber}">
+                            <div class="episode-content">
+                                <h3 class="episode-title">${episode.episode}</h3>
+                                <div class="episode-meta">
+                                    <span>Episode ${episodeNumber}</span>
+                                    <span><i class="fas fa-play-circle"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                episodesHTML = '<p>Episode tidak tersedia</p>';
+            }
+            
+            // Create recommendations HTML
+            let recommendationsHTML = '';
+            if (anime.recommendations && anime.recommendations.length > 0) {
+                recommendationsHTML = `
+                    <div class="section">
+                        <h2 class="section-title">Rekomendasi</h2>
+                        <div class="anime-grid">
+                            ${anime.recommendations.map(rec => `
+                                <div class="anime-card" data-slug="${rec.slug}">
+                                    <img src="${rec.poster}" alt="${rec.title}" class="anime-poster">
+                                    <div class="anime-info">
+                                        <h3 class="anime-title">${rec.title}</h3>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = `
+                <div class="detail-header">
+                    <img src="${anime.poster}" alt="${anime.title}" class="detail-poster">
+                    <div class="detail-info">
+                        <h1 class="detail-title">${anime.title}</h1>
+                        <p class="detail-japanese">${anime.japanese_title || ''}</p>
+                        
+                        <div class="detail-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Rating</span>
+                                <span class="meta-value"><i class="fas fa-star" style="color: gold;"></i> ${anime.rating || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Tipe</span>
+                                <span class="meta-value">${anime.type || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Status</span>
+                                <span class="meta-value">${anime.status || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Episode</span>
+                                <span class="meta-value">${anime.episode_count || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Durasi</span>
+                                <span class="meta-value">${anime.duration || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Studio</span>
+                                <span class="meta-value">${anime.studio || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Tanggal Rilis</span>
+                                <span class="meta-value">${anime.release_date || 'N/A'}</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Produser</span>
+                                <span class="meta-value">${anime.produser || 'N/A'}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="genres">
+                            ${genresHTML || '<span>Genre tidak tersedia</span>'}
+                        </div>
+                        
+                        <div class="synopsis">
+                            <h3>Sinopsis</h3>
+                            <p>${anime.synopsis || 'Sinopsis tidak tersedia.'}</p>
+                        </div>
+                        
+                        <div class="hero-buttons">
+                            ${anime.episode_lists && anime.episode_lists.length > 0 ? `
+                                <button class="btn btn-primary" id="watch-first-episode">
+                                    <i class="fas fa-play"></i> Tonton Episode 1
+                                </button>
+                            ` : ''}
+                            <button class="btn btn-secondary" onclick="navigateTo('home')">
+                                <i class="fas fa-arrow-left"></i> Kembali
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h2 class="section-title">Daftar Episode</h2>
+                    <div class="episode-list">
+                        ${episodesHTML}
+                    </div>
+                </div>
+                
+                ${recommendationsHTML}
+            `;
+            
+            // Add event listeners for episodes - FIXED EPISODE CLICK
+            container.querySelectorAll('.episode-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const episodeNumber = card.getAttribute('data-episode');
+                    if (episodeNumber) {
+                        navigateToEpisode(anime.slug, episodeNumber);
+                    } else {
+                        showNotification('Tidak dapat memuat episode');
+                    }
+                });
+            });
+            
+            // Add event listener for watch first episode button
+            const watchButton = document.getElementById('watch-first-episode');
+            if (watchButton && anime.episode_lists && anime.episode_lists.length > 0) {
+                watchButton.addEventListener('click', () => {
+                    navigateToEpisode(anime.slug, 1);
+                });
+            }
+            
+            // Add event listeners for recommendation cards
+            container.querySelectorAll('.anime-card[data-slug]').forEach(card => {
+                card.addEventListener('click', () => {
+                    const slug = card.getAttribute('data-slug');
+                    navigateToAnimeDetail(slug);
+                });
+            });
+            
+            // Add event listeners for genre tags
+            container.querySelectorAll('.genre-tag[data-slug]').forEach(tag => {
+                tag.addEventListener('click', () => {
+                    const slug = tag.getAttribute('data-slug');
+                    const name = tag.textContent;
+                    navigateToGenreDetail(slug, name);
+                });
+            });
+        }
+
+        function renderEpisode(episodeData) {
+            const container = document.querySelector('#episode-page .episode-container');
+            
+            // Clean the anime slug from episode data
+            const animeSlug = cleanAnimeSlug(episodeData.anime.slug);
+            
+            // Create download links HTML
+            let downloadHTML = '';
+            if (episodeData.download_urls) {
+                for (const format in episodeData.download_urls) {
+                    downloadHTML += `
+                        <div class="download-format">
+                            <h3 class="format-title">Format ${format.toUpperCase()}</h3>
+                            ${episodeData.download_urls[format].map(resolution => `
+                                <div class="resolution-section">
+                                    <h4 class="resolution-title">${resolution.resolution}</h4>
+                                    <div class="download-links">
+                                        ${resolution.urls.map(link => `
+                                            <a href="${link.url}" target="_blank" class="download-link">
+                                                <i class="fas fa-download"></i> ${link.provider}
+                                            </a>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+            } else {
+                downloadHTML = '<p>Link download tidak tersedia</p>';
+            }
+            
+            container.innerHTML = `
+                <h1 class="section-title">${episodeData.episode}</h1>
+                
+                <div class="video-container">
+                    <iframe 
+                        class="video-player" 
+                        src="${episodeData.stream_url}" 
+                        frameborder="0" 
+                        allowfullscreen
+                        allow="autoplay; encrypted-media"
+                    ></iframe>
+                </div>
+                
+                <div class="quality-selector">
+                    <span>Kualitas Video:</span>
+                    <button class="quality-btn active" data-quality="auto">Auto</button>
+                    <button class="quality-btn" data-quality="720">720p</button>
+                    <button class="quality-btn" data-quality="480">480p</button>
+                    <button class="quality-btn" data-quality="360">360p</button>
+                </div>
+                
+                <div class="episode-navigation">
+                    <button class="btn btn-secondary" id="prev-episode" ${!episodeData.has_previous_episode ? 'disabled' : ''}>
+                        <i class="fas fa-arrow-left"></i> Episode Sebelumnya
+                    </button>
+                    <button class="btn btn-secondary" onclick="navigateToAnimeDetail('${animeSlug}')">
+                        <i class="fas fa-list"></i> Daftar Episode
+                    </button>
+                    <button class="btn btn-secondary" id="next-episode" ${!episodeData.has_next_episode ? 'disabled' : ''}>
+                        Episode Selanjutnya <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="download-section">
+                    <h2 class="section-title">Download Episode</h2>
+                    ${downloadHTML}
+                </div>
+            `;
+            
+            // Add event listeners for navigation - FIXED NAVIGATION
+            const prevButton = document.getElementById('prev-episode');
+            const nextButton = document.getElementById('next-episode');
+            
+            if (prevButton && episodeData.has_previous_episode) {
+                prevButton.addEventListener('click', () => {
+                    const prevEpisodeNumber = extractEpisodeNumber(episodeData.previous_episode.slug);
+                    if (prevEpisodeNumber && animeSlug) {
+                        navigateToEpisode(animeSlug, prevEpisodeNumber);
+                    }
+                });
+            }
+            
+            if (nextButton && episodeData.has_next_episode) {
+                nextButton.addEventListener('click', () => {
+                    const nextEpisodeNumber = extractEpisodeNumber(episodeData.next_episode.slug);
+                    if (nextEpisodeNumber && animeSlug) {
+                        navigateToEpisode(animeSlug, nextEpisodeNumber);
+                    }
+                });
+            }
+            
+            // Add event listeners for quality buttons
+            const qualityButtons = container.querySelectorAll('.quality-btn');
+            qualityButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    qualityButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    showNotification(`Kualitas diubah ke ${this.textContent}`);
+                });
+            });
+        }
+
+        function renderPagination(containerId, pagination, type, param = null) {
+            const container = document.getElementById(containerId);
+            if (!pagination || !container) return;
+            
+            let html = '<div class="pagination">';
+            
+            if (pagination.has_previous_page) {
+                html += `<button class="page-btn" data-page="${pagination.previous_page}">Sebelumnya</button>`;
+            }
+            
+            // Show page numbers
+            const current = pagination.current_page;
+            const last = pagination.last_visible_page;
+            
+            // Show first page
+            if (last > 0) {
+                html += `<button class="page-btn ${current === 1 ? 'active' : ''}" data-page="1">1</button>`;
+            }
+            
+            // Show ellipsis if needed
+            if (current > 3) {
+                html += `<span style="color: var(--gray); padding: 8px 5px;">...</span>`;
+            }
+            
+            // Show pages around current
+            for (let i = Math.max(2, current - 1); i <= Math.min(last - 1, current + 1); i++) {
+                html += `<button class="page-btn ${current === i ? 'active' : ''}" data-page="${i}">${i}</button>`;
+            }
+            
+            // Show ellipsis if needed
+            if (current < last - 2) {
+                html += `<span style="color: var(--gray); padding: 8px 5px;">...</span>`;
+            }
+            
+            // Show last page if not already shown
+            if (last > 1) {
+                html += `<button class="page-btn ${current === last ? 'active' : ''}" data-page="${last}">${last}</button>`;
+            }
+            
+            if (pagination.has_next_page) {
+                html += `<button class="page-btn" data-page="${pagination.next_page}">Selanjutnya</button>`;
+            }
+            
+            html += '</div>';
+            
+            container.innerHTML = html;
+            
+            // Add event listeners to pagination buttons
+            container.querySelectorAll('.page-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const page = parseInt(button.getAttribute('data-page'));
+                    if (type === 'ongoing') {
+                        loadOngoingAnime(page);
+                    } else if (type === 'complete') {
+                        loadCompleteAnime(page);
+                    } else if (type === 'genre') {
+                        loadGenreDetail(param, page);
+                    } else if (type === 'search') {
+                        searchAnime(param, page);
+                    }
+                });
+            });
+        }
+
+        // Helper function to create anime card
+        function createAnimeCard(anime, type) {
+            const card = document.createElement('div');
+            card.className = 'anime-card';
+            card.setAttribute('data-slug', anime.slug);
+            
+            let metaHTML = '';
+            if (type === 'ongoing') {
+                metaHTML = `
+                    <div class="anime-meta">
+                        <span>${anime.current_episode || 'Episode ?'}</span>
+                        <span>${anime.release_day || 'TBA'}</span>
+                    </div>
+                `;
+            } else if (type === 'complete' || type === 'genre' || type === 'search') {
+                metaHTML = `
+                    <div class="anime-meta">
+                        <span>${anime.episode_count || '?'} Episode</span>
+                        <span><i class="fas fa-star" style="color: gold;"></i> ${anime.rating || 'N/A'}</span>
+                    </div>
+                `;
+            }
+            
+            card.innerHTML = `
+                <img src="${anime.poster}" alt="${anime.title}" class="anime-poster" onerror="this.src='https://via.placeholder.com/200x280/2a2a2a/ffffff?text=No+Image'">
+                <div class="anime-info">
+                    <h3 class="anime-title">${anime.title}</h3>
+                    ${metaHTML}
+                </div>
+            `;
+            
+            card.addEventListener('click', () => {
+                navigateToAnimeDetail(anime.slug);
+            });
+            
+            return card;
+        }
+
+        // Helper function to extract episode number from slug or title
+        function extractEpisodeNumber(slug, title = '') {
+            // Try to extract from slug first
+            let match = slug.match(/-(\d+)-sub-indo/);
+            if (match) return match[1];
+            
+            match = slug.match(/episode-(\d+)/);
+            if (match) return match[1];
+            
+            match = slug.match(/-(\d+)$/);
+            if (match) return match[1];
+            
+            // Try from title
+            match = title.match(/Episode (\d+)/);
+            if (match) return match[1];
+            
+            // Last resort - get any number from slug
+            match = slug.match(/\d+/);
+            if (match) return match[0];
+            
+            return '1'; // Default to episode 1 if cannot extract
+        }
+
+        // Navigation to anime detail
+        function navigateToAnimeDetail(slug) {
+            // Hide all pages
+            pages.forEach(p => p.classList.remove('active'));
+            
+            // Show anime detail page
+            document.getElementById('anime-detail-page').classList.add('active');
+            
+            // Update current page
+            currentPage = 'anime-detail';
+            currentAnimeSlug = slug;
+            
+            // Load anime detail
+            loadAnimeDetail(slug);
+        }
+
+        // Navigation to episode
+        function navigateToEpisode(slug, episode) {
+            // Hide all pages
+            pages.forEach(p => p.classList.remove('active'));
+            
+            // Show episode page
+            document.getElementById('episode-page').classList.add('active');
+            
+            // Update current page
+            currentPage = 'episode';
+            currentAnimeSlug = slug;
+            currentEpisodeSlug = episode;
+            
+            // Load episode data
+            loadEpisode(slug, episode);
+        }
+
+        // Navigation to genre detail
+        function navigateToGenreDetail(slug, name) {
+            // Hide all pages
+            pages.forEach(p => p.classList.remove('active'));
+            
+            // Show genre detail page
+            document.getElementById('genre-detail-page').classList.add('active');
+            
+            // Update current page
+            currentPage = 'genre-detail';
+            currentGenre = name;
+            
+            // Load genre detail
+            loadGenreDetail(slug, 1);
+        }
+    </script>
+</body>
+</html>
